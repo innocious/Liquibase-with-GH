@@ -3,31 +3,15 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="1" author="yourname">
-        <comment>Create initial 'preventions' table</comment>
+    <changeSet id="1" author="dev-team">
         <createTable tableName="preventions">
-            <column name="id" type="SERIAL">
+            <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="rule_name" type="varchar(255)"/>
         </createTable>
-        <rollback>
-            <dropTable tableName="preventions"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="2" author="yourname">
-        <comment>Add 'description' column to preventions table</comment>
-        <addColumn tableName="preventions">
-            <column name="description" type="TEXT"/>
-        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,0 +1,64 @@
+# Name of the GitHub Actions workflow
+name: Miniature Liquibase Pipeline
+
+# --- Triggers ---
+# Defines when this workflow will run
+on:
+  # 1. Allows manual execution from the GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      # Defines a parameter 'ENV' for the manual run
+      ENV:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - uat
+          - prod
+        default: 'dev'
+
+  # 2. Runs automatically on pushes to the main branch
+  push:
+    branches:
+      - main
+
+# --- Jobs ---
+# A workflow run is made up of one or more jobs
+jobs:
+  # Job ID: a unique identifier for the job
+  apply-schema-changes:
+    # Job Name: The name displayed in the GitHub UI
+    # It dynamically shows which environment is being targeted
+    name: Apply Schema Changes to ${{ github.event.inputs.ENV || 'dev' }}
+
+    # Runner: Specifies the type of machine to run the job on
+    runs-on: ubuntu-latest
+
+    # Container: Specifies a Docker container to run the job's steps in.
+    # This gives us instant access to the Liquibase CLI without installing it.
+    container:
+      image: liquibase/liquibase:4.20.0
+
+    # Steps: A sequence of tasks that will be executed in order
+    steps:
+      # Step 1: Check out the repository code
+      # This action checks-out your repository under $GITHUB_WORKSPACE,
+      # so your job can access your scripts and liquibase files.
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Make our updater script executable
+      # The checkout action preserves file permissions, but it's good practice
+      # to explicitly set the execute bit.
+      - name: Make script executable
+        run: chmod +x scripts/liquibase_updater.sh
+
+      # Step 3: Run the Liquibase Updater Script
+      # This is the main step where we execute our logic.
+      - name: Run Liquibase Updater Script
+        # We run our script and pass it the environment choice.
+        # - ${{ github.event.inputs.ENV }}: Value from a manual 'workflow_dispatch' run.
+        # - || 'dev': A fallback value. If triggered by a 'push', inputs don't exist,
+        #   so it defaults to 'dev'.
+        run: ./scripts/liquibase_updater.sh ${{ github.event.inputs.ENV || 'dev' }}
