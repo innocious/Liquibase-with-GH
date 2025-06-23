@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: subfolders/preventions/changelog.xml
+  - include:
+      file: subfolders/subscriptions/changelog.xml
+  - include:
+      file: subfolders/identities/changelog.xml
