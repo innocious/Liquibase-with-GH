@@ -52,7 +52,9 @@ jobs:
       # The checkout action preserves file permissions, but it's good practice
       # to explicitly set the execute bit.
       - name: Make script executable
-        run: chmod +x scripts/liquibase_updater.sh
+        run: |
+          ls -la
+          chmod +x scripts/liquibase_updater.sh
 
       # Step 3: Run the Liquibase Updater Script
       # This is the main step where we execute our logic.
