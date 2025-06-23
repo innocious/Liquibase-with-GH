@@ -63,4 +63,4 @@ jobs:
         # - ${{ github.event.inputs.ENV }}: Value from a manual 'workflow_dispatch' run.
         # - || 'dev': A fallback value. If triggered by a 'push', inputs don't exist,
         #   so it defaults to 'dev'.
-        run: ./scripts/liquibase_updater.sh ${{ github.event.inputs.ENV || 'dev' }}
+        run: .github/scripts/liquibase_updater.sh ${{ github.event.inputs.ENV || 'dev' }}
